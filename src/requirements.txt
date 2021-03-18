@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+asyncpg
+databases
+psycopg2
+
+# dev
+pytest
+requests
+
