@@ -3,6 +3,7 @@ uvicorn
 asyncpg
 databases
 psycopg2
+passlib
 
 # dev
 pytest

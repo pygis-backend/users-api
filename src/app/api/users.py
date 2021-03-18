@@ -15,3 +15,10 @@ async def create_user(payload: User):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail=f"Problem occured during user creation")
     return user
+
+@router.get("/{id}", response_model=PublicUser, status_code=status.HTTP_200_OK)
+async def get_user(id:int):
+    user = await user_repository.get_one(id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"The user with id {id} was not found")
+    return user
