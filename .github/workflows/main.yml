@@ -18,7 +18,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: build
         run: docker-compose up -d --build
-      - name: run
-        run: docker run --network container:users-api
-      - name: list containers
-        run: docker ps -a
+      - name: test
+        run: docker-compose exec -T web pytest
