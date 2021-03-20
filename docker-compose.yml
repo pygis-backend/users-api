@@ -23,8 +23,5 @@ services:
       - POSTGRES_DB=gis_users
     ports:
       - 5432:5432
-
-  test:
-    command: web pytest
 volumes:
   postgres_data:
