@@ -67,7 +67,7 @@ def test_user_hashing_password():
 @pytest.mark.parametrize(
     "payload, status_code, api_key",
     [
-        [{"email": "some_existing_user", "password": "some_existing_password"}, status.HTTP_200_OK,
+        [{"email": "some_existing_user", "password": "some_existing_password"}, status.HTTP_401_UNAUTHORIZED,
          os.getenv("API_KEY")],
         [{"email": "john"}, status.HTTP_422_UNPROCESSABLE_ENTITY, os.getenv("API_KEY")],
         [{"email": "some_existing_user", "password": "not_corresponding_password"}, status.HTTP_401_UNAUTHORIZED,
