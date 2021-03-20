@@ -10,6 +10,8 @@ services:
       - 8002:8000
     environment:
       - DATABASE_URL=postgresql://postgres:secret@db/gis_users
+      - API_KEY=iwhdiodhoiwehwioh
+      - API_KEY_NAME=access_token
   db:
     image: postgres:12.1-alpine
     volumes:
