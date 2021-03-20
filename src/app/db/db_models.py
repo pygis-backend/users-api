@@ -8,7 +8,7 @@ Users = Table(
     metadata,
     Column("id", Integer, primary_key=True),
     Column("email", String(50)),
-    Column("password", String(50)),
+    Column("password", String(255)),
     Column("is_admin", Boolean, default=expression.false()),
     Column("created_date", DateTime, default=func.now(), nullable=False),
 )
