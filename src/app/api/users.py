@@ -36,7 +36,7 @@ router = APIRouter()
 
 @router.post("/", response_model=PublicUser, status_code=status.HTTP_201_CREATED)
 async def create_user(payload: User, api_key: APIKey = Depends(get_api_key)):
-    user = await user_repository.get_one_by_name(payload.email)
+    user = await user_repository.get_one_by_name(payload.username)
     if user:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                             detail=f"Username already exists")

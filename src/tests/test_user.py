@@ -13,9 +13,9 @@ from ..app.api.schemas import User
 @pytest.mark.parametrize(
     "payload, status_code, api_key",
     [
-        [{"email": "john", "password": "secret"}, status.HTTP_201_CREATED, os.getenv("API_KEY")],
-        [{"email": "john", "password": "secret"}, status.HTTP_401_UNAUTHORIZED, None],
-        [{"email": "john"}, status.HTTP_422_UNPROCESSABLE_ENTITY, os.getenv("API_KEY")],
+        [{"username": "iejdoejfw", "password": "secret"}, status.HTTP_201_CREATED, os.getenv("API_KEY")],
+        [{"username": "john", "password": "secret"}, status.HTTP_401_UNAUTHORIZED, None],
+        [{"username": "john"}, status.HTTP_422_UNPROCESSABLE_ENTITY, os.getenv("API_KEY")],
         [{"password": "secret"}, status.HTTP_422_UNPROCESSABLE_ENTITY, os.getenv("API_KEY")],
         [{"password": "4let"}, status.HTTP_422_UNPROCESSABLE_ENTITY, os.getenv("API_KEY")]
     ]
@@ -25,7 +25,7 @@ def test_create_user(test_app: TestClient, monkeypatch, payload, status_code, ap
         return 1
 
     async def mock_get_one(id):
-        return {"id": 1, "email": "john", "password": "secret"}
+        return {"id": 1, "username": "john", "password": "secret"}
 
     test_app.headers[os.getenv("API_KEY_NAME")] = api_key
     monkeypatch.setattr(user_repository, "create", mock_create)
@@ -35,7 +35,7 @@ def test_create_user(test_app: TestClient, monkeypatch, payload, status_code, ap
 
 
 def test_retrieve_user(test_app: TestClient, monkeypatch):
-    test_user = {"id": 1, "email": "john"}
+    test_user = {"id": 1, "username": "john"}
 
     async def mock_get_one(id):
         return test_user
@@ -67,21 +67,21 @@ def test_user_hashing_password():
 @pytest.mark.parametrize(
     "payload, status_code, api_key",
     [
-        [{"email": "some_existing_user", "password": "some_existing_password"}, status.HTTP_200_OK,
+        [{"username": "some_existing_user", "password": "some_existing_password"}, status.HTTP_200_OK,
          os.getenv("API_KEY")],
-        [{"email": "john"}, status.HTTP_422_UNPROCESSABLE_ENTITY, os.getenv("API_KEY")],
-        [{"email": "some_existing_user", "password": "not_corresponding_password"}, status.HTTP_401_UNAUTHORIZED,
+        [{"username": "john"}, status.HTTP_422_UNPROCESSABLE_ENTITY, os.getenv("API_KEY")],
+        [{"username": "some_existing_user", "password": "not_corresponding_password"}, status.HTTP_401_UNAUTHORIZED,
          os.getenv("API_KEY")],
-        [{"email": "not_existing_user", "password": "some_existing_password"}, status.HTTP_401_UNAUTHORIZED,
+        [{"username": "not_existing_user", "password": "some_existing_password"}, status.HTTP_401_UNAUTHORIZED,
          os.getenv("API_KEY")],
-        [{"email": "not_existing_user", "password": "some_existing_password"}, status.HTTP_401_UNAUTHORIZED, None]
+        [{"username": "not_existing_user", "password": "some_existing_password"}, status.HTTP_401_UNAUTHORIZED, None]
     ]
 )
 def test_user_credentials(test_app: TestClient, monkeypatch, payload, status_code, api_key):
     async def mock_check_credentials(credentials: User):
-        if "email" in payload and "password" in payload:
-            if payload["email"] == "some_existing_user" and payload["password"] == "some_existing_password":
-                return True
+        if "username" in payload and "password" in payload:
+            if payload["username"] == "some_existing_user" and payload["password"] == "some_existing_password":
+                return {"username": "some_existing_user", "id":1}
         return False
 
     monkeypatch.setattr(user_repository, "check_credentials", mock_check_credentials)
