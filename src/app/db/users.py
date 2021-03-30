@@ -15,6 +15,9 @@ async def get_one(id: int):
     query = Users.select().where(id == Users.c.id)
     return await database.fetch_one(query=query)
 
+async def get_one_by_name(email: str):
+    query = Users.select().where(email == Users.c.email)
+    return await database.fetch_one(query=query)
 
 async def check_credentials(user: User):
     query = Users.select().where(Users.c.email == user.email)
@@ -25,4 +28,4 @@ async def check_credentials(user: User):
     print(password_ok)
     if not password_ok:
         return False
-    return True
+    return exists

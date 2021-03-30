@@ -36,6 +36,10 @@ router = APIRouter()
 
 @router.post("/", response_model=PublicUser, status_code=status.HTTP_201_CREATED)
 async def create_user(payload: User, api_key: APIKey = Depends(get_api_key)):
+    user = await user_repository.get_one_by_name(payload.email)
+    if user:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                            detail=f"Username already exists")
     user_id = await user_repository.create(payload)
     user = await user_repository.get_one(user_id)
     if not user:
@@ -52,7 +56,7 @@ async def get_user(id: int, api_key: APIKey = Depends(get_api_key)):
     return user
 
 
-@router.post("/credentials", status_code=status.HTTP_200_OK)
+@router.post("/credentials", response_model=PublicUser, status_code=status.HTTP_200_OK)
 async def check_user_credentials(request: User, api_key: APIKey = Depends(get_api_key)):
     valid_credentials = await user_repository.check_credentials(request)
     if not valid_credentials:
@@ -61,5 +65,5 @@ async def check_user_credentials(request: User, api_key: APIKey = Depends(get_ap
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    return True
+    return valid_credentials
 
