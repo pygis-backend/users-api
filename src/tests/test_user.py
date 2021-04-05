@@ -88,3 +88,4 @@ def test_user_credentials(test_app: TestClient, monkeypatch, payload, status_cod
     test_app.headers[os.getenv("API_KEY_NAME")] = api_key
     response = test_app.post("/users/credentials", data=json.dumps(payload))
     assert response.status_code == status_code
+
