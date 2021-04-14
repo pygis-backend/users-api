@@ -29,9 +29,9 @@ async def check_credentials(user: User):
     query = Users.select().where(Users.c.username == user.username)
     user_found = await database.fetch_all(query=query)
     log_sql_query(sql_query=query, record_num=len(user_found))
-    if not len(user_found) == 0:
+    if len(user_found) == 0:
         return False
     password_ok = hashing.verify(user_found[0].get("password"), user.password)
     if not password_ok:
         return False
-    return user_found
+    return user_found[0]
