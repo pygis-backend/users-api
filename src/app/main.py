@@ -9,7 +9,7 @@ from .api import monitor, users
 from .db.db_engine import engine, database
 from .db.db_models import metadata
 from .utils.logs import RestLogger, log_http_request, log_http_response
-
+RestLogger.init_logger()
 metadata.create_all(engine)
 
 app = FastAPI()
