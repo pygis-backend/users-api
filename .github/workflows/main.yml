@@ -30,3 +30,4 @@ jobs:
           dockerfile: ./src/Dockerfile
           repository: nessgis/users-api
           tag_with_ref: true
+          context: ./src
