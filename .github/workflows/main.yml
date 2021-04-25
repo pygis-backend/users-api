@@ -28,5 +28,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: ./src/Dockerfile
+          constext : ./src
           repository: nessgis/users-api
           tag_with_ref: true
