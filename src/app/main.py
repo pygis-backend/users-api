@@ -1,10 +1,7 @@
 import time
 import uuid
-
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
-
 from .api import monitor, users
 from .db.db_engine import engine, database
 from .db.db_models import metadata
@@ -21,15 +18,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 
 @app.middleware("http")
 async def add_request_id_process_time_header(request: Request, call_next):
@@ -59,4 +47,4 @@ async def shutdown():
 
 
 app.include_router(monitor.router, prefix="/monitor", tags=["monitoring"])
-app.include_router(users.router, prefix="/users", tags=["notes"])
+app.include_router(users.router, prefix="/users", tags=["users"])
